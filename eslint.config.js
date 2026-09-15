@@ -5,7 +5,15 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  {
+    ignores: [
+      'dist',
+      // macOS AppleDouble 元数据文件，不是源码
+      '**/._*',
+      // 仅用于 node 下跑的测试脚本（使用全局桩，允许 any）
+      'scripts/**',
+    ],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],

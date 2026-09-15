@@ -3,14 +3,17 @@ import { MapPin, Clock, Volume2, Sun, Armchair } from 'lucide-react';
 import type { Bench } from '@/types';
 import { MATERIAL_LABELS, SHADE_LABELS, NOISE_LABELS, STAY_DURATION_LABELS } from '@/types';
 import Rating from '@/components/Rating/Rating';
+import HighlightText from '@/components/HighlightText/HighlightText';
+import type { FieldSnippet } from '@/utils/search';
 import { calculateComfortScore, getComfortLevel, getComfortColor } from '@/utils/comfort';
 
 interface BenchCardProps {
   bench: Bench;
   index?: number;
+  snippets?: FieldSnippet[];
 }
 
-export default function BenchCard({ bench, index = 0 }: BenchCardProps) {
+export default function BenchCard({ bench, index = 0, snippets }: BenchCardProps) {
   const navigate = useNavigate();
   const comfortScore = calculateComfortScore(bench);
   const comfortLevel = getComfortLevel(comfortScore);
@@ -73,6 +76,19 @@ export default function BenchCard({ bench, index = 0 }: BenchCardProps) {
             <span>{STAY_DURATION_LABELS[bench.stayDuration]}</span>
           </div>
         </div>
+
+        {snippets && snippets.length > 0 && (
+          <div className="mt-3 pt-3 border-t border-deep-brown/10 space-y-1.5">
+            {snippets.map((snippet) => (
+              <div key={snippet.field} className="flex gap-1.5 text-xs leading-relaxed">
+                <span className="flex-shrink-0 text-moss-green font-medium">{snippet.label}</span>
+                <span className="text-ink-light line-clamp-2 break-all">
+                  <HighlightText segments={snippet.segments} />
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
